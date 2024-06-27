@@ -207,11 +207,11 @@ public:
     SetBuffers() {}
 
     virtual tsl::elm::Element* createUI() override {
-		auto frame = new tsl::elm::OverlayFrame("NVN Set Buffering", "");
+		auto frame = new tsl::elm::OverlayFrame("NVN 버퍼링 설정", "");
 
 		auto list = new tsl::elm::List();
-		list->addItem(new tsl::elm::CategoryHeader("It will be applied on next game boot.", false));
-		list->addItem(new tsl::elm::CategoryHeader("Remember to save settings after change.", true));
+		list->addItem(new tsl::elm::CategoryHeader("타이틀 재기동 시 적용됩니다", false));
+		list->addItem(new tsl::elm::CategoryHeader("변경 후 설정을 저장하세요", true));
 		auto *clickableListItem = new tsl::elm::ListItem("Double");
 		clickableListItem->setClickListener([](u64 keys) { 
 			if ((keys & HidNpadButton_A) && PluginRunning) {
@@ -287,11 +287,11 @@ public:
     SyncMode() {}
 
     virtual tsl::elm::Element* createUI() override {
-        auto frame = new tsl::elm::OverlayFrame("NVN Window Sync Wait", "Mode");
+        auto frame = new tsl::elm::OverlayFrame("NVN 창 동기화 대기", "모드");
 
 		auto list = new tsl::elm::List();
 
-		auto *clickableListItem = new tsl::elm::ListItem("Enabled");
+		auto *clickableListItem = new tsl::elm::ListItem("활성화");
 		clickableListItem->setClickListener([](u64 keys) { 
 			if ((keys & HidNpadButton_A) && PluginRunning) {
 				ZeroSyncMode = "On";
@@ -304,7 +304,7 @@ public:
 		});
 		list->addItem(clickableListItem);
 
-		auto *clickableListItem2 = new tsl::elm::ListItem("Semi-Enabled");
+		auto *clickableListItem2 = new tsl::elm::ListItem("준활성화");
 		clickableListItem2->setClickListener([](u64 keys) { 
 			if ((keys & HidNpadButton_A) && PluginRunning) {
 				ZeroSyncMode = "Semi";
@@ -317,7 +317,7 @@ public:
 		});
 		list->addItem(clickableListItem2);
 
-		auto *clickableListItem3 = new tsl::elm::ListItem("Disabled");
+		auto *clickableListItem3 = new tsl::elm::ListItem("비활성화");
 		clickableListItem3->setClickListener([](u64 keys) { 
 			if ((keys & HidNpadButton_A) && PluginRunning) {
 				ZeroSyncMode = "Off";
@@ -342,21 +342,21 @@ public:
 		configValid = LOCK::readConfig(&configPath[0]);
 		if (R_FAILED(configValid)) {
 			if (configValid == 0x202) {
-				sprintf(&lockInvalid[0], "Game config file not found\nTID: %016lX\nBID: %016lX", TID, BID);
+				sprintf(&lockInvalid[0], "게임 설정 파일이 없습니다!\nTID: %016lX\nBID: %016lX", TID, BID);
 			}
-			else sprintf(&lockInvalid[0], "Game config error: 0x%X", configValid);
+			else sprintf(&lockInvalid[0], "게임 설정 오류: 0x%X", configValid);
 		}
 		else {
 			patchValid = checkFile(&patchPath[0]);
 			if (R_FAILED(patchValid)) {
 				if (!FileDownloaded) {
-					sprintf(&patchChar[0], "Patch file doesn't exist.");
+					sprintf(&patchChar[0], "패치 파일이 없습니다!");
 				}
 				else {
-					sprintf(&patchChar[0], "New config downloaded successfully.");
+					sprintf(&patchChar[0], "새 구성 다운로드 성공!");
 				}
 			}
-			else sprintf(&patchChar[0], "Patch file exists.");
+			else sprintf(&patchChar[0], "패치 파일이 있습니다!");
 		}
 		switch(*ZeroSync_shared) {
 			case 0:
@@ -373,7 +373,7 @@ public:
 	size_t base_height = 68;
 
     virtual tsl::elm::Element* createUI() override {
-        auto frame = new tsl::elm::OverlayFrame("FPSLocker", "Advanced settings");
+        auto frame = new tsl::elm::OverlayFrame("FPSLocker", "고급 설정");
 
 		auto list = new tsl::elm::List();
 
@@ -388,7 +388,7 @@ public:
 		list->addItem(new tsl::elm::CustomDrawer([this](tsl::gfx::Renderer *renderer, s32 x, s32 y, s32 w, s32 h) {
 
 			if (R_SUCCEEDED(configValid)) {
-				renderer->drawString("Found valid config file!", false, x, y+20, 20, renderer->a(0xFFFF));
+				renderer->drawString("유효한 구성 파일 찾음!", false, x, y+20, 20, renderer->a(0xFFFF));
 				renderer->drawString(&patchChar[0], false, x, y+40, 20, renderer->a(0xFFFF));
 				renderer->drawString(&patchAppliedChar[0], false, x, y+60, 20, renderer->a(0xFFFF));
 				renderer->drawString(&nvnBuffers[0], false, x, y+82, 20, renderer->a(0xFFFF));
@@ -410,7 +410,7 @@ public:
 				case 1: {
 					list->addItem(new tsl::elm::CategoryHeader("NVN", true));
 					if (*Buffers_shared == 2 || *SetBuffers_shared == 2 || *ActiveBuffers_shared == 2) {
-						auto *clickableListItem3 = new tsl::elm::MiniListItem("Window Sync Wait", ZeroSyncMode);
+						auto *clickableListItem3 = new tsl::elm::MiniListItem("창 동기화 대기", ZeroSyncMode);
 						clickableListItem3->setClickListener([](u64 keys) { 
 							if ((keys & HidNpadButton_A) && PluginRunning) {
 								tsl::changeTo<SyncMode>();
@@ -421,7 +421,7 @@ public:
 						list->addItem(clickableListItem3);
 					}
 					if (*Buffers_shared > 2) {
-						auto *clickableListItem3 = new tsl::elm::MiniListItem("Set Buffering");
+						auto *clickableListItem3 = new tsl::elm::MiniListItem("버퍼링 설정");
 						clickableListItem3->setClickListener([](u64 keys) { 
 							if ((keys & HidNpadButton_A) && PluginRunning) {
 								tsl::changeTo<SetBuffers>();
@@ -442,28 +442,28 @@ public:
 		}
 
 		if (R_SUCCEEDED(configValid)) {
-			list->addItem(new tsl::elm::CategoryHeader("It will be applied on next game boot", true));
-			auto *clickableListItem = new tsl::elm::MiniListItem("Convert config to patch file");
+			list->addItem(new tsl::elm::CategoryHeader("게임 재기동 시 적용됩니다!", true));
+			auto *clickableListItem = new tsl::elm::MiniListItem("설정을 패치 파일로 전환합니다!");
 			clickableListItem->setClickListener([](u64 keys) { 
 				if ((keys & HidNpadButton_A) && PluginRunning) {
 					patchValid = LOCK::createPatch(&patchPath[0]);
 					if (R_SUCCEEDED(patchValid)) {
-						sprintf(&patchChar[0], "Patch file created successfully.");
+						sprintf(&patchChar[0], "패치 파일 작성 완료!");
 					}
-					else sprintf(&patchChar[0], "Error while creating patch: 0x%x", patchValid);
+					else sprintf(&patchChar[0], "패치 생성중 오류 발생!: 0x%x", patchValid);
 					return true;
 				}
 				return false;
 			});
 			list->addItem(clickableListItem);
 
-			auto *clickableListItem2 = new tsl::elm::MiniListItem("Delete patch file");
+			auto *clickableListItem2 = new tsl::elm::MiniListItem("패치 파일 제거");
 			clickableListItem2->setClickListener([](u64 keys) { 
 				if ((keys & HidNpadButton_A) && PluginRunning) {
 					if (R_SUCCEEDED(patchValid)) {
 						remove(&patchPath[0]);
 						patchValid = 0x202;
-						sprintf(&patchChar[0], "Patch file deleted successfully.");
+						sprintf(&patchChar[0], "패치 파일 제거 완료!");
 					}
 					return true;
 				}
@@ -471,23 +471,23 @@ public:
 			});
 			list->addItem(clickableListItem2);
 		}
-		list->addItem(new tsl::elm::CategoryHeader("If exists, it will also remove existing patch file.", false));
-		auto *clickableListItem4 = new tsl::elm::MiniListItem("Check/download config file");
+		list->addItem(new tsl::elm::CategoryHeader("기존 패치는 제거됩니다!", false));
+		auto *clickableListItem4 = new tsl::elm::MiniListItem("설정 파일 확인/다운로드");
 		clickableListItem4->setClickListener([](u64 keys) { 
 			if ((keys & HidNpadButton_A) && PluginRunning) {
 
 				Result rc = downloadPatch();
 				if (rc == 0x212 || rc == 0x312) {
-					sprintf(&patchChar[0], "Patch is not available! RC: 0x%x", rc);
+					sprintf(&patchChar[0], "패치를 사용할 수 없습니다! RC: 0x%x", rc);
 				}
 				else if (rc == 0x404) {
-					sprintf(&patchChar[0], "Patch is not available! Err 404");
+					sprintf(&patchChar[0], "패치를 사용할 수 없습니다! 오류 404");
 				}
 				else if (rc == 0x104) {
-					sprintf(&patchChar[0], "No new config available.");
+					sprintf(&patchChar[0], "새 구성 사용 불가!");
 				}
 				else if (rc == 0x412) {
-					sprintf(&patchChar[0], "Internet connection not available!");
+					sprintf(&patchChar[0], "인터넷 연결 오류!");
 				}
 				else if (R_SUCCEEDED(rc)) {
 					FILE* fp = fopen(patchPath, "rb");
@@ -499,7 +499,7 @@ public:
 					tsl::changeTo<AdvancedGui>();
 				}
 				else {
-					sprintf(&patchChar[0], "Patch downloading failed! RC: 0x%x", rc);
+					sprintf(&patchChar[0], "패치 다운로드 실패! RC: 0x%x", rc);
 				}
 				return true;
 			}
@@ -518,12 +518,12 @@ public:
 		if (PluginRunning) {
 			if (i > 9) {
 				if (*patchApplied_shared == 1) {
-					sprintf(patchAppliedChar, "Patch was loaded to game");
+					sprintf(patchAppliedChar, "게임 패치 로드 완료!");
 				}
 				else if (*patchApplied_shared == 2) {
-					sprintf(patchAppliedChar, "Master Write was loaded to game");
+					sprintf(patchAppliedChar, "마스터 쓰기가 게임에 로드 됨");
 				}
-				else sprintf(patchAppliedChar, "Plugin didn't apply patch to game");
+				else sprintf(patchAppliedChar, "게임 패치 플러그인 동작 실패!");
 				if (*API_shared == 1) {
 					if ((*Buffers_shared >= 2 && *Buffers_shared <= 4)) {
 						sprintf(&nvnBuffers[0], "Set/Active/Available buffers: %d/%d/%d", *SetActiveBuffers_shared, *ActiveBuffers_shared, *Buffers_shared);
@@ -558,7 +558,7 @@ public:
 		// A list that can contain sub elements and handles scrolling
 		auto list = new tsl::elm::List();
 
-		auto *clickableListItem = new tsl::elm::ListItem("Delete settings");
+		auto *clickableListItem = new tsl::elm::ListItem("설정 제거");
 		clickableListItem->setClickListener([this](u64 keys) { 
 			if (keys & HidNpadButton_A) {
 				char path[512] = "";
@@ -589,7 +589,7 @@ public:
 
 		list->addItem(clickableListItem);
 
-		auto *clickableListItem2 = new tsl::elm::ListItem("Delete patches");
+		auto *clickableListItem2 = new tsl::elm::ListItem("패치 제거");
 		clickableListItem2->setClickListener([this](u64 keys) { 
 			if (keys & HidNpadButton_A) {
 				char folder[640] = "";
@@ -661,7 +661,7 @@ public:
 	virtual tsl::elm::Element* createUI() override {
 		// A OverlayFrame is the base element every overlay consists of. This will draw the default Title and Subtitle.
 		// If you need more information in the header or want to change it's look, use a HeaderOverlayFrame.
-		auto frame = new tsl::elm::OverlayFrame("FPSLocker", APP_VERSION);
+		auto frame = new tsl::elm::OverlayFrame("FPSLocker", APP_VERSION"-ASAP");
 
 		// A list that can contain sub elements and handles scrolling
 		auto list = new tsl::elm::List();
@@ -669,20 +669,20 @@ public:
 		if (oldSalty || isOLED || !SaltySD) {
 			list->addItem(new tsl::elm::CustomDrawer([](tsl::gfx::Renderer *renderer, s32 x, s32 y, s32 w, s32 h) {
 				if (!SaltySD) {
-					renderer->drawString("SaltyNX is not working!", false, x, y+20, 20, renderer->a(0xF33F));
+					renderer->drawString("SaltyNX가 작동하지 않습니다!", false, x, y+20, 20, renderer->a(0xF33F));
 				}
 				else if (!plugin) {
-					renderer->drawString("Can't detect NX-FPS plugin on sdcard!", false, x, y+20, 20, renderer->a(0xF33F));
+					renderer->drawString("SD 카드의 NX-FPS 플러그인 감지 실패!", false, x, y+20, 20, renderer->a(0xF33F));
 				}
 				else if (!check) {
-					renderer->drawString("Game is not running!", false, x, y+20, 19, renderer->a(0xF33F));
+					renderer->drawString("실행된 게임이 없습니다!", false, x, y+20, 19, renderer->a(0xF33F));
 				}
 			}), 30);
 		}
 
 		if (R_FAILED(rc)) {
 			char error[24] = "";
-			sprintf(&error[0], "Err: 0x%x", rc);
+			sprintf(&error[0], "오류: 0x%x", rc);
 			auto *clickableListItem2 = new tsl::elm::ListItem(error);
 			clickableListItem2->setClickListener([](u64 keys) { 
 				if (keys & HidNpadButton_A) {
@@ -756,7 +756,7 @@ public:
 	size_t base_height = 128;
 
     virtual tsl::elm::Element* createUI() override {
-        auto frame = new tsl::elm::OverlayFrame("FPSLocker", "Display settings");
+        auto frame = new tsl::elm::OverlayFrame("FPSLocker", "디스플레이 설정");
 
 		auto list = new tsl::elm::List();
 
@@ -767,7 +767,7 @@ public:
 
 		if (!displaySync) {
 
-			auto *clickableListItem = new tsl::elm::ListItem("Increase Refresh Rate");
+			auto *clickableListItem = new tsl::elm::ListItem("새로고침 빈도 UP");
 			clickableListItem->setClickListener([this](u64 keys) { 
 				if ((keys & HidNpadButton_A) && !isDocked) {
 					if ((this -> refreshRate >= 40) && (this -> refreshRate < 60)) {
@@ -789,7 +789,7 @@ public:
 
 			list->addItem(clickableListItem);
 
-			auto *clickableListItem2 = new tsl::elm::ListItem("Decrease Refresh Rate");
+			auto *clickableListItem2 = new tsl::elm::ListItem("새로고침 빈도 DOWN");
 			clickableListItem2->setClickListener([this](u64 keys) { 
 				if ((keys & HidNpadButton_A) && !isDocked) {
 					if (this -> refreshRate > 40) {
@@ -813,8 +813,8 @@ public:
 		}
 
 		if (!oldSalty) {
-			list->addItem(new tsl::elm::CategoryHeader("Match refresh rate with FPS Target.", true));
-			auto *clickableListItem3 = new tsl::elm::ToggleListItem("Display Sync", displaySync);
+			list->addItem(new tsl::elm::CategoryHeader("FPS 타겟과 새로고침 빈도 동기화", true));
+			auto *clickableListItem3 = new tsl::elm::ToggleListItem("디스플레이 동기화", displaySync);
 			clickableListItem3->setClickListener([this](u64 keys) { 
 				if (keys & HidNpadButton_A) {
 					if (R_SUCCEEDED(SaltySD_Connect())) {
@@ -869,24 +869,24 @@ public:
 			isDocked = false;
 		}
 		if (!isDocked)
-			snprintf(refreshRate_c, sizeof(refreshRate_c), "LCD Refresh Rate: %d Hz", refreshRate);
-		else strncpy(refreshRate_c, "Not available in docked mode!", 30);
+			snprintf(refreshRate_c, sizeof(refreshRate_c), "LCD 재생률: %d Hz", refreshRate);
+		else strncpy(refreshRate_c, "독 모드에서 이용 불가!", 30);
 	}
 };
 
 class WarningDisplayGui : public tsl::Gui {
 private:
 	uint8_t refreshRate = 0;
-	std::string Warning =	"THIS IS EXPERIMENTAL FUNCTION!\n\n"
-							"It can cause irreparable damage\n"
-							"to your display.\n\n"
-							"By pressing Accept you are taking\n"
-							"full responsibility for anything\n"
-							"that can occur because of this tool.";
+	std::string Warning =	"실험적 기능입니다!\n\n"
+							"디스플레이에 복구 불가한\n"
+							"손상을 초래할 수 있습니다.\n\n"
+							"수락을 선택하여 발생할 수 있는\n"
+							"모든 문제에 대하여 전적으로\n"
+							"책임은 본인에게 있습니다.";
 
-	std::string Docked =	"This function is not available\n"
-							"in docked mode!\n\n"
-							"Accept button is disabled.";
+	std::string Docked =	"독 모드에서는 해당 기능을\n"
+							"사용할 수 없습니다!\n\n"
+							"수락 버튼 비활성화 상태";
 public:
     WarningDisplayGui() {
 		apmGetPerformanceMode(&performanceMode);
@@ -901,7 +901,7 @@ public:
 	size_t base_height = 128;
 
     virtual tsl::elm::Element* createUI() override {
-        auto frame = new tsl::elm::OverlayFrame("FPSLocker", "Display settings warning");
+        auto frame = new tsl::elm::OverlayFrame("FPSLocker", "디스플레이 설정 경고");
 
 		auto list = new tsl::elm::List();
 
@@ -911,7 +911,7 @@ public:
 			else renderer->drawString(Docked.c_str(), false, x, y+20, 20, renderer->a(0xFFFF));
 		}), 200);
 
-		auto *clickableListItem1 = new tsl::elm::ListItem("Decline");
+		auto *clickableListItem1 = new tsl::elm::ListItem("거부");
 		clickableListItem1->setClickListener([this](u64 keys) { 
 			if (keys & HidNpadButton_A) {
 				tsl::goBack();
@@ -922,7 +922,7 @@ public:
 
 		list->addItem(clickableListItem1);
 
-		auto *clickableListItem2 = new tsl::elm::ListItem("Accept");
+		auto *clickableListItem2 = new tsl::elm::ListItem("수락");
 		clickableListItem2->setClickListener([this](u64 keys) { 
 			if ((keys & HidNpadButton_A) && !isDocked) {
 				tsl::goBack();
@@ -953,24 +953,24 @@ public:
 	virtual tsl::elm::Element* createUI() override {
 		// A OverlayFrame is the base element every overlay consists of. This will draw the default Title and Subtitle.
 		// If you need more information in the header or want to change it's look, use a HeaderOverlayFrame.
-		auto frame = new tsl::elm::OverlayFrame("FPSLocker", APP_VERSION);
+		auto frame = new tsl::elm::OverlayFrame("FPSLocker", APP_VERSION"-ASAP");
 
 		// A list that can contain sub elements and handles scrolling
 		auto list = new tsl::elm::List();
 
 		list->addItem(new tsl::elm::CustomDrawer([](tsl::gfx::Renderer *renderer, s32 x, s32 y, s32 w, s32 h) {
 			if (!SaltySD) {
-				renderer->drawString("SaltyNX is not working!", false, x, y+20, 20, renderer->a(0xF33F));
+				renderer->drawString("SaltyNX가 작동하지 않습니다!", false, x, y+20, 20, renderer->a(0xF33F));
 			}
 			else if (!plugin) {
-				renderer->drawString("Can't detect NX-FPS plugin on sdcard!", false, x, y+20, 20, renderer->a(0xF33F));
+				renderer->drawString("SD 카드의 NX-FPS 플러그인 감지 실패!", false, x, y+20, 20, renderer->a(0xF33F));
 			}
 			else if (!check) {
-				renderer->drawString("Game is not running!", false, x, y+20, 19, renderer->a(0xF33F));
+				renderer->drawString("실행된 게임이 없습니다!", false, x, y+20, 19, renderer->a(0xF33F));
 			}
 		}), 30);
 
-		auto *clickableListItem2 = new tsl::elm::ListItem("Games list");
+		auto *clickableListItem2 = new tsl::elm::ListItem("게임 리스트");
 		clickableListItem2->setClickListener([this](u64 keys) { 
 			if (keys & HidNpadButton_A) {
 				tsl::changeTo<NoGame2>(this -> rc, 2, true);
@@ -981,7 +981,7 @@ public:
 
 		list->addItem(clickableListItem2);
 
-		auto *clickableListItem3 = new tsl::elm::ListItem("Display settings", "\uE151");
+		auto *clickableListItem3 = new tsl::elm::ListItem("디스플레이 설정", "\uE151");
 		clickableListItem3->setClickListener([](u64 keys) { 
 			if (keys & HidNpadButton_A) {
 				tsl::changeTo<WarningDisplayGui>();
@@ -1015,36 +1015,36 @@ public:
 	virtual tsl::elm::Element* createUI() override {
 		// A OverlayFrame is the base element every overlay consists of. This will draw the default Title and Subtitle.
 		// If you need more information in the header or want to change it's look, use a HeaderOverlayFrame.
-		auto frame = new tsl::elm::OverlayFrame("FPSLocker", APP_VERSION);
+		auto frame = new tsl::elm::OverlayFrame("FPSLocker", APP_VERSION"-ASAP");
 
 		// A list that can contain sub elements and handles scrolling
 		auto list = new tsl::elm::List();
 		
 		list->addItem(new tsl::elm::CustomDrawer([](tsl::gfx::Renderer *renderer, s32 x, s32 y, s32 w, s32 h) {
 			if (!SaltySD) {
-				renderer->drawString("SaltyNX is not working!", false, x, y+50, 20, renderer->a(0xF33F));
+				renderer->drawString("SaltyNX가 작동하지 않습니다!", false, x, y+50, 20, renderer->a(0xF33F));
 			}
 			else if (!plugin) {
-				renderer->drawString("Can't detect NX-FPS plugin on sdcard!", false, x, y+50, 20, renderer->a(0xF33F));
+				renderer->drawString("SD 카드의 NX-FPS 플러그인 감지 실패!", false, x, y+50, 20, renderer->a(0xF33F));
 			}
 			else if (!check) {
 				if (closed) {
-					renderer->drawString("Game was closed! Overlay disabled!", false, x, y+20, 19, renderer->a(0xF33F));
+					renderer->drawString("게임 종료, 오버레이 비활성화 됨!", false, x, y+20, 19, renderer->a(0xF33F));
 				}
 				else {
-					renderer->drawString("Game is not running! Overlay disabled!", false, x, y+20, 19, renderer->a(0xF33F));
+					renderer->drawString("실행된 게임 없음, 오버레이 비활성화 됨!", false, x, y+20, 19, renderer->a(0xF33F));
 				}
 			}
 			else if (!PluginRunning) {
-				renderer->drawString("Game is running.", false, x, y+20, 20, renderer->a(0xFFFF));
-				renderer->drawString("NX-FPS is not running!", false, x, y+40, 20, renderer->a(0xF33F));
+				renderer->drawString("게임 실행중", false, x, y+20, 20, renderer->a(0xFFFF));
+				renderer->drawString("NX-FPS가 작동하지 않습니다!", false, x, y+40, 20, renderer->a(0xF33F));
 			}
 			else if (!*pluginActive) {
-				renderer->drawString("NX-FPS is running, but no frame was processed.", false, x, y+20, 20, renderer->a(0xF33F));
-				renderer->drawString("Restart overlay to check again.", false, x, y+50, 20, renderer->a(0xFFFF));
+				renderer->drawString("NX-FPS 실행중이지만, 프레임 처리 없음", false, x, y+20, 20, renderer->a(0xF33F));
+				renderer->drawString("오버레이를 다시 시작하십시오", false, x, y+50, 20, renderer->a(0xFFFF));
 			}
 			else {
-				renderer->drawString("NX-FPS is running.", false, x, y+20, 20, renderer->a(0xFFFF));
+				renderer->drawString("NX-FPS 실행중", false, x, y+20, 20, renderer->a(0xFFFF));
 				if ((*API_shared > 0) && (*API_shared <= 2))
 					renderer->drawString(FPSMode_c, false, x, y+40, 20, renderer->a(0xFFFF));
 				renderer->drawString(FPSTarget_c, false, x, y+60, 20, renderer->a(0xFFFF));
@@ -1053,7 +1053,7 @@ public:
 		}), 90);
 
 		if (PluginRunning && *pluginActive) {
-			auto *clickableListItem = new tsl::elm::ListItem("Increase FPS target");
+			auto *clickableListItem = new tsl::elm::ListItem("FPS UP");
 			clickableListItem->setClickListener([](u64 keys) { 
 				if ((keys & HidNpadButton_A) && PluginRunning) {
 					if (*FPSmode_shared == 2 && !*FPSlocked_shared) {
@@ -1086,7 +1086,7 @@ public:
 
 			list->addItem(clickableListItem);
 			
-			auto *clickableListItem2 = new tsl::elm::ListItem("Decrease FPS target");
+			auto *clickableListItem2 = new tsl::elm::ListItem("FPS DOWN");
 			clickableListItem2->setClickListener([](u64 keys) { 
 				if ((keys & HidNpadButton_A) && PluginRunning) {
 					if (*FPSmode_shared < 2 && !*FPSlocked_shared) {
@@ -1118,7 +1118,7 @@ public:
 			});
 			list->addItem(clickableListItem2);
 
-			auto *clickableListItem4 = new tsl::elm::ListItem("Disable custom FPS target");
+			auto *clickableListItem4 = new tsl::elm::ListItem("커스텀 FPS 비활성화");
 			clickableListItem4->setClickListener([](u64 keys) { 
 				if ((keys & HidNpadButton_A) && PluginRunning) {
 					if (*FPSlocked_shared) {
@@ -1137,7 +1137,7 @@ public:
 			});
 			list->addItem(clickableListItem4);
 
-			auto *clickableListItem3 = new tsl::elm::ListItem("Advanced settings");
+			auto *clickableListItem3 = new tsl::elm::ListItem("고급 설정");
 			clickableListItem3->setClickListener([](u64 keys) { 
 				if ((keys & HidNpadButton_A) && PluginRunning) {
 					tsl::changeTo<AdvancedGui>();
@@ -1147,7 +1147,7 @@ public:
 			});
 			list->addItem(clickableListItem3);
 
-			auto *clickableListItem5 = new tsl::elm::ListItem("Save settings");
+			auto *clickableListItem5 = new tsl::elm::ListItem("설정 저장");
 			clickableListItem5->setClickListener([](u64 keys) { 
 				if ((keys & HidNpadButton_A) && PluginRunning) {
 					if (!*FPSlocked_shared && !*ZeroSync_shared && !SetBuffers_save) {
@@ -1185,7 +1185,7 @@ public:
 		}
 
 		if (!isOLED && SaltySD) {
-			auto *clickableListItem6 = new tsl::elm::ListItem("Display settings", "\uE151");
+			auto *clickableListItem6 = new tsl::elm::ListItem("디스플레이 설정", "\uE151");
 			clickableListItem6->setClickListener([](u64 keys) { 
 				if (keys & HidNpadButton_A) {
 					tsl::changeTo<WarningDisplayGui>();
@@ -1220,18 +1220,18 @@ public:
 				switch (*FPSmode_shared) {
 					case 0:
 						//This is usually a sign that game doesn't use interval
-						sprintf(FPSMode_c, "Interval Mode: 0 (Unused)");
+						sprintf(FPSMode_c, "인터벌 모드 : 0 (미사용)");
 						break;
 					case 1 ... 5:
-						sprintf(FPSMode_c, "Interval Mode: %d (%d FPS)", *FPSmode_shared, refreshRate_g / *FPSmode_shared);
+						sprintf(FPSMode_c, "인터벌 모드 : %d (%d FPS)", *FPSmode_shared, refreshRate_g / *FPSmode_shared);
 						break;
 					default:
-						sprintf(FPSMode_c, "Interval Mode: %d (Wrong)", *FPSmode_shared);
+						sprintf(FPSMode_c, "인터벌 모드 : %d (잘못됨)", *FPSmode_shared);
 				}
 				if (!*FPSlocked_shared) {
-					sprintf(FPSTarget_c, "Custom FPS Target: Disabled");
+					sprintf(FPSTarget_c, "커스텀 FPS : 비활성화");
 				}
-				else sprintf(FPSTarget_c, "Custom FPS Target: %d", *FPSlocked_shared);
+				else sprintf(FPSTarget_c, "커스텀 FPS : %d", *FPSlocked_shared);
 				sprintf(PFPS_c, "%d", *FPS_shared);
 				i = 0;
 			}
