@@ -870,7 +870,7 @@ public:
 		}
 		if (!isDocked)
 			snprintf(refreshRate_c, sizeof(refreshRate_c), "LCD 재생률: %d Hz", refreshRate);
-		else strncpy(refreshRate_c, "독 모드에서 이용 불가!", 30);
+		else strncpy(refreshRate_c, "독 모드 이용 불가!", 30);
 	}
 };
 
