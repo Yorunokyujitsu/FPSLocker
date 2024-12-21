@@ -1,5 +1,6 @@
 #pragma once
 #include <curl/curl.h>
+#include <ultra.hpp>
 
 struct resolutionCalls {
 	uint16_t width;
@@ -224,7 +225,8 @@ void downloadPatch(void*) {
 		char file_path[192] = "";
 		snprintf(download_path, sizeof(download_path), "sdmc:/SaltySD/plugins/FPSLocker/patches/%016lX/", TID);
 		
-		std::filesystem::create_directories(download_path);
+		//std::filesystem::create_directories(download_path);
+		ult::createDirectory(download_path);
 
 		snprintf(file_path, sizeof(file_path), "sdmc:/SaltySD/plugins/FPSLocker/patches/%016lX/temp.yaml", TID);
 
@@ -342,7 +344,8 @@ void downloadPatch(void*) {
 						curl_easy_setopt(curl, CURLOPT_TIMEOUT_MS, msPeriod);
 						FILE* fp = fopen(file_path, "wb");
 						if (!fp) {
-							std::filesystem::create_directories(std::filesystem::path(file_path).parent_path());
+							//std::filesystem::create_directories(std::filesystem::path(file_path).parent_path());
+							ult::createDirectory(ult::getParentDirFromPath(file_path));
 							fp = fopen(file_path, "wb");
 						}
 						if (fp) {
