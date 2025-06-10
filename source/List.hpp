@@ -158,7 +158,7 @@ namespace tsl {
                     }
                 }
 
-                renderer->drawString("▶", false, this->getX() + x, this->getY() + y + 45, 20, a(highlightColor));
+                renderer->drawString("", false, this->getX() + x, this->getY() + y + 45, 20, a(highlightColor));
 
             }
 

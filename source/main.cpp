@@ -1,8 +1,8 @@
 #define TESLA_INIT_IMPL // If you have more than one file using the tesla header, only define this in the main one
 #include <tesla.hpp>    // The Tesla Header
-#include "MiniList.hpp"
+//#include "MiniList.hpp" // already a part of libultrahand
 #include "NoteHeader.hpp"
-#include "List.hpp"
+//#include "List.hpp" // substituted with regular ListItems (cosmetic preference)
 #include <sys/stat.h>
 #include <dirent.h>
 #include "SaltyNX.h"
@@ -41,7 +41,7 @@ public:
 		// A list that can contain sub elements and handles scrolling
 		auto list = new tsl::elm::List();
 
-		auto *clickableListItem = new tsl::elm::ListItem2("Delete settings");
+		auto *clickableListItem = new tsl::elm::ListItem("설정 제거");
 		clickableListItem->setClickListener([this](u64 keys) { 
 			if (keys & HidNpadButton_A) {
 				char path[512] = "";
@@ -72,7 +72,7 @@ public:
 
 		list->addItem(clickableListItem);
 
-		auto *clickableListItem2 = new tsl::elm::ListItem2("Delete patches");
+		auto *clickableListItem2 = new tsl::elm::ListItem("패치 제거");
 		clickableListItem2->setClickListener([this](u64 keys) { 
 			if (keys & HidNpadButton_A) {
 				char folder[640] = "";
@@ -144,7 +144,7 @@ public:
 	virtual tsl::elm::Element* createUI() override {
 		// A OverlayFrame is the base element every overlay consists of. This will draw the default Title and Subtitle.
 		// If you need more information in the header or want to change it's look, use a HeaderOverlayFrame.
-		auto frame = new tsl::elm::OverlayFrame("FPSLocker", APP_VERSION);
+		auto frame = new tsl::elm::OverlayFrame("FPSLocker", APP_VERSION "-ASAP");
 
 		// A list that can contain sub elements and handles scrolling
 		auto list = new tsl::elm::List();
@@ -152,13 +152,13 @@ public:
 		if (oldSalty || !SaltySD) {
 			list->addItem(new tsl::elm::CustomDrawer([](tsl::gfx::Renderer *renderer, s32 x, s32 y, s32 w, s32 h) {
 				if (!SaltySD) {
-					renderer->drawString("SaltyNX is not working!", false, x, y+20, 20, renderer->a(0xF33F));
+					renderer->drawString("SaltyNX가 작동하지 않습니다!", false, x, y+20, 20, renderer->a(0xF33F));
 				}
 				else if (!plugin) {
-					renderer->drawString("Can't detect NX-FPS plugin on sdcard!", false, x, y+20, 20, renderer->a(0xF33F));
+					renderer->drawString("SD 카드의 NX-FPS 플러그인 감지 실패!", false, x, y+20, 20, renderer->a(0xF33F));
 				}
 				else if (!check) {
-					renderer->drawString("Game is not running!", false, x, y+20, 19, renderer->a(0xF33F));
+					renderer->drawString("실행된 게임이 없습니다!", false, x, y+20, 19, renderer->a(0xF33F));
 				}
 			}), 30);
 		}
@@ -166,7 +166,7 @@ public:
 		if (R_FAILED(rc)) {
 			char error[24] = "";
 			sprintf(&error[0], "Err: 0x%x", rc);
-			auto *clickableListItem2 = new tsl::elm::ListItem2(error);
+			auto *clickableListItem2 = new tsl::elm::ListItem(error);
 			clickableListItem2->setClickListener([](u64 keys) { 
 				if (keys & HidNpadButton_A) {
 					return true;
@@ -177,10 +177,10 @@ public:
 			list->addItem(clickableListItem2);
 		}
 		else {
-			auto *clickableListItem3 = new tsl::elm::ListItem2("All");
+			auto *clickableListItem3 = new tsl::elm::ListItem("전체");
 			clickableListItem3->setClickListener([](u64 keys) { 
 				if (keys & HidNpadButton_A) {
-					tsl::changeTo<NoGameSub>(0x1234567890ABCDEF, "Everything");
+					tsl::changeTo<NoGameSub>(0x1234567890ABCDEF, "모든 설정 및 패치");
 					return true;
 				}
 				return false;
@@ -189,7 +189,7 @@ public:
 			list->addItem(clickableListItem3);
 
 			for (size_t i = 0; i < titles.size(); i++) {
-				auto *clickableListItem = new tsl::elm::ListItem2(titles[i].TitleName);
+				auto *clickableListItem = new tsl::elm::ListItem(titles[i].TitleName);
 				clickableListItem->setClickListener([i](u64 keys) { 
 					if (keys & HidNpadButton_A) {
 						tsl::changeTo<NoGameSub>(titles[i].TitleID, titles[i].TitleName);
@@ -223,24 +223,24 @@ public:
 	virtual tsl::elm::Element* createUI() override {
 		// A OverlayFrame is the base element every overlay consists of. This will draw the default Title and Subtitle.
 		// If you need more information in the header or want to change it's look, use a HeaderOverlayFrame.
-		auto frame = new tsl::elm::OverlayFrame("FPSLocker", APP_VERSION);
+		auto frame = new tsl::elm::OverlayFrame("FPSLocker", APP_VERSION "-ASAP");
 
 		// A list that can contain sub elements and handles scrolling
 		auto list = new tsl::elm::List();
 
 		list->addItem(new tsl::elm::CustomDrawer([](tsl::gfx::Renderer *renderer, s32 x, s32 y, s32 w, s32 h) {
 			if (!SaltySD) {
-				renderer->drawString("SaltyNX is not working!", false, x, y+20, 20, renderer->a(0xF33F));
+				renderer->drawString("SaltyNX가 작동하지 않습니다!", false, x, y+20, 20, renderer->a(0xF33F));
 			}
 			else if (!plugin) {
-				renderer->drawString("Can't detect NX-FPS plugin on sdcard!", false, x, y+20, 20, renderer->a(0xF33F));
+				renderer->drawString("SD 카드의 NX-FPS 플러그인 감지 실패!", false, x, y+20, 20, renderer->a(0xF33F));
 			}
 			else if (!check) {
-				renderer->drawString("Game is not running!", false, x, y+20, 19, renderer->a(0xF33F));
+				renderer->drawString("실행된 게임이 없습니다!", false, x, y+20, 19, renderer->a(0xF33F));
 			}
 		}), 30);
 
-		auto *clickableListItem2 = new tsl::elm::ListItem2("Games list");
+		auto *clickableListItem2 = new tsl::elm::ListItem("게임 목록");
 		clickableListItem2->setClickListener([this](u64 keys) { 
 			if (keys & HidNpadButton_A) {
 				tsl::changeTo<NoGame2>(this -> rc, 2, true);
@@ -251,7 +251,7 @@ public:
 
 		list->addItem(clickableListItem2);
 
-		auto *clickableListItem3 = new tsl::elm::ListItem2("Display settings", "\uE151");
+		auto *clickableListItem3 = new tsl::elm::ListItem("디스플레이 설정", "\uE151");
 		clickableListItem3->setClickListener([](u64 keys) { 
 			if (keys & HidNpadButton_A) {
 				tsl::changeTo<WarningDisplayGui>();
@@ -324,7 +324,7 @@ public:
 	virtual tsl::elm::Element* createUI() override {
 		// A OverlayFrame is the base element every overlay consists of. This will draw the default Title and Subtitle.
 		// If you need more information in the header or want to change it's look, use a HeaderOverlayFrame.
-		auto frame = new tsl::elm::OverlayFrame("FPSLocker", "Change FPS Target");
+		auto frame = new tsl::elm::OverlayFrame("FPSLocker", "FPS 변경");
 
 		// A list that can contain sub elements and handles scrolling
 		auto list = new tsl::elm::List();
@@ -503,48 +503,48 @@ public:
 	virtual tsl::elm::Element* createUI() override {
 		// A OverlayFrame is the base element every overlay consists of. This will draw the default Title and Subtitle.
 		// If you need more information in the header or want to change it's look, use a HeaderOverlayFrame.
-		auto frame = new tsl::elm::OverlayFrame("FPSLocker", APP_VERSION);
+		auto frame = new tsl::elm::OverlayFrame("FPSLocker", APP_VERSION "-ASAP");
 
 		// A list that can contain sub elements and handles scrolling
 		auto list = new tsl::elm::List();
 		
 		list->addItem(new tsl::elm::CustomDrawer([this](tsl::gfx::Renderer *renderer, s32 x, s32 y, s32 w, s32 h) {
 			if (!SaltySD) {
-				renderer->drawString("SaltyNX is not working!", false, x, y+50, 20, renderer->a(0xF33F));
+				renderer->drawString("SaltyNX가 작동하지 않습니다!", false, x, y+50, 20, renderer->a(0xF33F));
 			}
 			else if (!plugin) {
-				renderer->drawString("Can't detect NX-FPS plugin on sdcard!", false, x, y+50, 20, renderer->a(0xF33F));
+				renderer->drawString("SD 카드의 NX-FPS 플러그인 감지 실패!", false, x, y+50, 20, renderer->a(0xF33F));
 			}
 			else if (!check) {
 				if (closed) {
-					renderer->drawString("Game was closed! Overlay disabled!", false, x, y+20, 19, renderer->a(0xF33F));
+					renderer->drawString("게임 종료, 오버레이 비활성화 됨!", false, x, y+20, 19, renderer->a(0xF33F));
 				}
 				else {
-					renderer->drawString("Game is not running! Overlay disabled!", false, x, y+20, 19, renderer->a(0xF33F));
+					renderer->drawString("실행된 게임 없음, 오버레이 비활성화 됨!", false, x, y+20, 19, renderer->a(0xF33F));
 				}
 			}
 			else if (!PluginRunning) {
-				renderer->drawString("Game is running.", false, x, y+20, 20, renderer->a(0xFFFF));
-				renderer->drawString("NX-FPS is not running!", false, x, y+40, 20, renderer->a(0xF33F));
+				renderer->drawString("게임 실행중", false, x, y+20, 20, renderer->a(0xFFFF));
+				renderer->drawString("NX-FPS가 작동하지 않습니다!", false, x, y+40, 20, renderer->a(0xF33F));
 			}
 			else if (!(Shared -> pluginActive)) {
-				renderer->drawString("NX-FPS is running, but no frame was processed.", false, x, y+20, 20, renderer->a(0xF33F));
-				renderer->drawString("Restart overlay to check again.", false, x, y+50, 20, renderer->a(0xFFFF));
+				renderer->drawString("NX-FPS 실행중이지만, 프레임 처리 없음", false, x, y+20, 20, renderer->a(0xF33F));
+				renderer->drawString("오버레이를 다시 시작하십시오", false, x, y+50, 20, renderer->a(0xFFFF));
 			}
 			else {
-				renderer->drawString("NX-FPS is running.", false, x, y+20, 20, renderer->a(0xFFFF));
+				renderer->drawString("NX-FPS 실행중", false, x, y+20, 20, renderer->a(0xFFFF));
 				if (((Shared -> API) > 0) && ((Shared -> API) <= 2))
 					renderer->drawString(FPSMode_c, false, x, y+40, 20, renderer->a(0xFFFF));
 				renderer->drawString(FPSTarget_c, false, x, y+60, 20, renderer->a(0xFFFF));
 				if (render100Above) renderer->drawString(PFPS_c, false, x+265, y+48, 50, renderer->a(0xFFFF));
 				else renderer->drawString(PFPS_c, false, x+290, y+48, 50, renderer->a(0xFFFF));
-				if (Shared -> forceOriginalRefreshRate) renderer->drawString("Patch is now forcing 60 Hz.", false, x, y+80, 20, renderer->a(0xF99F));
+				if (Shared -> forceOriginalRefreshRate) renderer->drawString("패치를 60 Hz로 강제합니다", false, x, y+80, 20, renderer->a(0xF99F));
 			}
 		}), 90);
 
 		if (PluginRunning && (Shared -> pluginActive)) {
 			if (entry_mode == ApmPerformanceMode_Normal) {
-				auto *clickableListItem = new tsl::elm::ListItem2("Increase FPS target");
+				auto *clickableListItem = new tsl::elm::ListItem("FPS ");
 				clickableListItem->setClickListener([](u64 keys) { 
 					if ((keys & HidNpadButton_A) && PluginRunning) {
 						if ((Shared -> FPSmode) == 2 && !(Shared -> FPSlocked)) {
@@ -593,7 +593,7 @@ public:
 
 				list->addItem(clickableListItem);
 				
-				auto *clickableListItem2 = new tsl::elm::ListItem2("Decrease FPS target");
+				auto *clickableListItem2 = new tsl::elm::ListItem("FPS ");
 				clickableListItem2->setClickListener([](u64 keys) { 
 					if ((keys & HidNpadButton_A) && PluginRunning) {
 						if ((Shared -> FPSmode) < 2 && !(Shared -> FPSlocked)) {
@@ -642,7 +642,7 @@ public:
 				list->addItem(clickableListItem2);
 			}
 			else if (entry_mode == ApmPerformanceMode_Boost) {
-				auto *clickableListItem2 = new tsl::elm::ListItem2("Change FPS target");
+				auto *clickableListItem2 = new tsl::elm::ListItem("FPS 변경");
 				clickableListItem2->setClickListener([](u64 keys) { 
 					if ((keys & HidNpadButton_A) && PluginRunning) {
 						tsl::changeTo<DockedFPSTargetGui>();
@@ -653,7 +653,7 @@ public:
 				list->addItem(clickableListItem2);			
 			}
 
-			auto *clickableListItem4 = new tsl::elm::ListItem2("Disable custom FPS target");
+			auto *clickableListItem4 = new tsl::elm::ListItem("커스텀 FPS 비활성화");
 			clickableListItem4->setClickListener([](u64 keys) { 
 				if ((keys & HidNpadButton_A) && PluginRunning) {
 					if ((Shared -> FPSlocked)) {
@@ -672,7 +672,7 @@ public:
 			});
 			list->addItem(clickableListItem4);
 
-			auto *clickableListItem3 = new tsl::elm::ListItem2("Advanced settings");
+			auto *clickableListItem3 = new tsl::elm::ListItem("고급 설정");
 			clickableListItem3->setClickListener([](u64 keys) { 
 				if ((keys & HidNpadButton_A) && PluginRunning) {
 					tsl::changeTo<AdvancedGui>();
@@ -682,7 +682,7 @@ public:
 			});
 			list->addItem(clickableListItem3);
 
-			auto *clickableListItem5 = new tsl::elm::ListItem2("Save settings");
+			auto *clickableListItem5 = new tsl::elm::ListItem("설정 저장");
 			clickableListItem5->setClickListener([](u64 keys) { 
 				if ((keys & HidNpadButton_A) && PluginRunning) {
 					if (!(Shared -> FPSlocked) && !(Shared -> ZeroSync) && !SetBuffers_save && !forceSuspend_save) {
@@ -719,7 +719,7 @@ public:
 		}
 
 		if (SaltySD) {
-			auto *clickableListItem6 = new tsl::elm::ListItem2("Display settings", "\uE151");
+			auto *clickableListItem6 = new tsl::elm::ListItem("디스플레이 설정", "\uE151");
 			clickableListItem6->setClickListener([](u64 keys) { 
 				if (keys & HidNpadButton_A) {
 					tsl::changeTo<WarningDisplayGui>();
@@ -746,21 +746,21 @@ public:
 				switch ((Shared -> FPSmode)) {
 					case 0:
 						//This is usually a sign that game doesn't use interval
-						sprintf(FPSMode_c, "Interval Mode: 0 (Unused)");
+						sprintf(FPSMode_c, "인터벌 모드: 0 (미사용)");
 						break;
 					case 1 ... 5:
 						if (std::fmod((double)refreshRate_g, (double)(Shared -> FPSmode)) != 0.0) {
-							sprintf(FPSMode_c, "Interval Mode: %d (%.1f FPS)", (Shared -> FPSmode), (double)refreshRate_g / (Shared -> FPSmode));
+							sprintf(FPSMode_c, "인터벌 모드: %d (%.1f FPS)", (Shared -> FPSmode), (double)refreshRate_g / (Shared -> FPSmode));
 						}
-						else sprintf(FPSMode_c, "Interval Mode: %d (%d FPS)", (Shared -> FPSmode), refreshRate_g / (Shared -> FPSmode));
+						else sprintf(FPSMode_c, "인터벌 모드: %d (%d FPS)", (Shared -> FPSmode), refreshRate_g / (Shared -> FPSmode));
 						break;
 					default:
-						sprintf(FPSMode_c, "Interval Mode: %d (Wrong)", (Shared -> FPSmode));
+						sprintf(FPSMode_c, "인터벌 모드: %d (잘못됨)", (Shared -> FPSmode));
 				}
 				if (!(Shared -> FPSlocked)) {
-					sprintf(FPSTarget_c, "Custom FPS Target: Disabled");
+					sprintf(FPSTarget_c, "커스텀 FPS: 비활성화");
 				}
-				else sprintf(FPSTarget_c, "Custom FPS Target: %d", (Shared -> FPSlocked));
+				else sprintf(FPSTarget_c, "커스텀 FPS: %d", (Shared -> FPSlocked));
 				uint8_t value = (Shared -> FPS);
 				sprintf(PFPS_c, "%d", value);
 				if (value >= 100) render100Above = true;
@@ -805,7 +805,7 @@ public:
 	// Called when this Gui gets loaded to create the UI
 	// Allocate all elements on the heap. libtesla will make sure to clean them up when not needed anymore
 	virtual tsl::elm::Element* createUI() override {
-		auto frame = new tsl::elm::OverlayFrame("FPSLocker", APP_VERSION);
+		auto frame = new tsl::elm::OverlayFrame("FPSLocker", APP_VERSION "-ASAP");
 		return frame;
 	}
 
